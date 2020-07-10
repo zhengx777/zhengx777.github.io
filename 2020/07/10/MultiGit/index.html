@@ -15,7 +15,7 @@
 <meta property="og:description" content="按目录配置多用户在2017年，git新发布的版本2.13.0包含了一个新的功能includeIf配置，可以把匹配的路径使用对应的配置用户名和邮箱； 在~&#x2F;目录下面存在三个配置文件，  .gitconfig &#x2F;&#x2F; 全局通用配置文件 .gitconfig-self &#x2F;&#x2F; 个人工程配置文件 .gitconfig-work &#x2F;&#x2F; 公司工程配置文件  全局通用配置文件~&#x2F;.gitconfig里面的内容是：主">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-07-10T10:23:57.000Z">
-<meta property="article:modified_time" content="2020-07-10T11:52:21.655Z">
+<meta property="article:modified_time" content="2020-07-10T11:55:24.992Z">
 <meta property="article:author" content="zhengx777">
 <meta name="twitter:card" content="summary">
   
@@ -127,7 +127,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh-agent bash</span><br><span class="line">ssh-add ~&#x2F;.ssh&#x2F;id_rsa_work</span><br></pre></td></tr></table></figure>
 
 <ul>
-<li>配置<del>/.ssh/config文件<br>前面我们在</del>/.ssh目录下面，使用ssh-keygen -C “your_email” -t rsa 生成公私秘钥，当有多个github账号的时候，可以生成多组rsa的公司密钥。然后配置~/.ssh/config文件（如果没有的话请重新创建一个）。</li>
+<li>配置<code>~/.ssh/config</code>文件<br>前面我们在<code>~/.ssh</code>目录下面，使用ssh-keygen -C “your_email” -t rsa 生成公私秘钥，当有多个github账号的时候，可以生成多组rsa的公司密钥。然后配置<code>~/.ssh/config</code>文件（如果没有的话请重新创建一个）。</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">touch config        # 创建config文件</span><br></pre></td></tr></table></figure>
 
@@ -144,7 +144,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/07/10/MultiGit/" data-id="ckcg5vej10001ecwrbcbmew2g" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/07/10/MultiGit/" data-id="ckcg60cw80001kawr52w455o1" class="article-share-link">Share</a>
       
       
     </footer>
