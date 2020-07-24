@@ -64,6 +64,73 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-LinuxCommand" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/07/24/LinuxCommand/" class="article-date">
+  <time datetime="2020-07-23T16:00:00.000Z" itemprop="datePublished">2020-07-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/07/24/LinuxCommand/">linux常用命令与技巧</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="linux常用命令与技巧"><a href="#linux常用命令与技巧" class="headerlink" title="linux常用命令与技巧"></a>linux常用命令与技巧</h3><h2 id="硬链接与软链接"><a href="#硬链接与软链接" class="headerlink" title="硬链接与软链接"></a>硬链接与软链接</h2><h1 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h1><p>硬链接 <code>ln source target</code></p>
+<p>软链接 <code>ln  -s source target</code></p>
+<p>很多同学会经常混淆，到底是从哪里链接到哪里，可以简单这么理解，第一个参数source 就是真实存在的文件路径， 第二个参数target就是创建的新路径（想象成快捷方式吧）。</p>
+<h1 id="区别（通俗的解释）"><a href="#区别（通俗的解释）" class="headerlink" title="区别（通俗的解释）"></a>区别（通俗的解释）</h1><p>其实链接就是链接，顾名思义，基本功能都是一样的，a路径里的一个文件，在b路径建立一个链接就能访问到，两个目录访问的都是一个文件, 那区别呢？</p>
+<p>新建文件，linux会创建一个索引节点（Inode）,指向存储的文件，比如</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ touch file</span><br><span class="line">$ ls -li</span><br><span class="line">3844143 -rw-r--r--  1 zhengx  staff  0  7 24 17:19 file</span><br></pre></td></tr></table></figure>
+
+<p>3844143 就是新建这个文件的索引节点，如果新建一个路径里面的内容还是这个索引节点，这就是硬链接, 如</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ ln ./file ./hard</span><br><span class="line">$ ls -li</span><br><span class="line">3844143 -rw-r--r--  2 zhengx  staff  0  7 24 17:19 file</span><br><span class="line">3844143 -rw-r--r--  2 zhengx  staff  0  7 24 17:19 hard</span><br></pre></td></tr></table></figure>
+
+<p>新建的链接和原来的文件都指向同一个索引节点。</p>
+<p>那么软链接呢，软链接肯定不能直接存索引节点了，要不就没区别了，软在哪呢？<br>软链接会新建一个特殊的文件，这个新建的文件存源文件的路径，访问这个链接时，到这个路径去访问文件，试一下。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ ln -s ./file ./soft</span><br><span class="line">$ ls -li</span><br><span class="line">3844143 -rw-r--r--  2 zhengx  staff  0  7 24 17:19 file</span><br><span class="line">3844143 -rw-r--r--  2 zhengx  staff  0  7 24 17:19 hard</span><br><span class="line">3844668 lrwxr-xr-x  1 zhengx  staff  6  7 24 17:37 soft -&gt; ./file</span><br></pre></td></tr></table></figure>
+
+<p>可以看出，软链接的索引节点与源文件不同，软链接又新建了一个文件，通过这个文件里存的路径去访问源文件。</p>
+<p>原理上的区别清楚了，功能上的区别就很好理解了。</p>
+<ol>
+<li><p>把源文件删除，软链接就访问不到了，软链接就存了个路径，删了源文件肯定访问不到。<br>硬链接存了索引节点，把源文件删了(其实就是删索引)，还是能正常索引到文件。<br>想真正删文件就得把所有的文件索引都删掉，文件才会真正删除，这和编程语言中的垃圾清理差不多。</p>
+</li>
+<li><p>源文件移动位置，软链接就访问不到了，硬链接没有影响，与上面同理。</p>
+</li>
+<li><p>硬链接只能对已存在的文件创建, 软链接因为存的是路径，可以建立。</p>
+</li>
+<li><p>硬链不能交叉文件系统, 软链可以，与上面同理。</p>
+</li>
+<li><p>软链接可以对目录建立。（不考虑超级用户）</p>
+</li>
+<li><p>软链接可以有自己的文件属性和权限。（软链接本来就是新建的文件）</p>
+</li>
+</ol>
+<p>附带介绍ls常用命令参数<br>ls -li  -la<br>-a, –all 列出目录下的所有文件，包括以 . 开头的隐含文件<br>-l 除了文件名之外，还将文件的权限、所有者、文件大小等信息详细列出来。<br>-i, –inode 印出每个文件的 inode 号</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/07/24/LinuxCommand/" data-id="ckd02ftom00006jwr9tdv8fu1" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-InitHexo" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/07/10/InitHexo/" class="article-date">
@@ -129,7 +196,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/07/10/InitHexo/" data-id="ckcg61kly0000mewraivx1f5o" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/07/10/InitHexo/" data-id="ckd02ftp900016jwretn91n2i" class="article-share-link">Share</a>
       
       
     </footer>
@@ -217,7 +284,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/07/10/MultiGit/" data-id="ckcg61km50001mewrb4nc5ya8" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/07/10/MultiGit/" data-id="ckd02ftpb00026jwr213ddl86" class="article-share-link">Share</a>
       
       
     </footer>
@@ -256,6 +323,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2020/07/24/LinuxCommand/">linux常用命令与技巧</a>
+          </li>
         
           <li>
             <a href="/2020/07/10/InitHexo/">使用Hexo搭建Github博客</a>
